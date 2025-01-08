@@ -37,7 +37,7 @@ XMLHttpRequest.prototype.send = function (...args) {
 const timerDiv = document.createElement("div");
 timerDiv.style.cssText = `
   position: fixed;
-  top: 50%;
+  bottom: 150px;
   left: 0px;
   background: rgba(0, 0, 0, 0.7);
   color: white;
@@ -50,25 +50,28 @@ timerDiv.style.cssText = `
 
 const connectBtn = document.createElement("button");
 connectBtn.textContent = "Connect KICKR";
-connectBtn.style.cssText = "margin: 5px 0; padding: 5px; width: 100%;";
+connectBtn.style.cssText =
+  "margin: 5px 0; padding: 5px; width: 100%; border: 1px solid #fff;";
 
 const scaleControls = document.createElement("div");
 scaleControls.innerHTML = `
-  <button id="decreaseScale" style="width: 45%; margin-right: 5%">Scale -</button>
-  <button id="increaseScale" style="width: 45%">Scale +</button>
+  <br>
+  <button id="decreaseScale" style="border: 1px solid #fff; padding: 5px">Scale -</button>
+  <button id="increaseScale" style="border: 1px solid #fff; padding: 5px">Scale +</button>
 `;
 
 const statusText = document.createElement("div");
 const metricsDiv = document.createElement("div");
 metricsDiv.innerHTML = `
+  <div style="white-space: pre-wrap; font-size:20px;" id="time-info"></div>
   <div style="font-size: 50px"><span id="kickrPower">-- W</span> <span id="kickrCadence">-- rpm</span></div>
   <div>Current Resistance: <span id="kickrResistance">--%</span> (<span id="scaleValue">50</span>% scale)</div>
 `;
 
 timerDiv.appendChild(connectBtn);
-timerDiv.appendChild(scaleControls);
 timerDiv.appendChild(statusText);
 timerDiv.appendChild(metricsDiv);
+timerDiv.appendChild(scaleControls);
 document.body.appendChild(timerDiv);
 
 document.getElementById("increaseScale").onclick = () => {
@@ -183,9 +186,8 @@ setInterval(() => {
         currentTime >= cue.offsets.start && currentTime <= cue.offsets.end,
     );
 
-    const timeDiv = document.createElement("div");
-    timeDiv.textContent = `Time: ${currentTime}s
-Target Resistance: n/a
+    const timeDiv = document.getElementById("time-info");
+    timeDiv.textContent = `Target Resistance: n/a
 Target Cadence: n/a`;
     if (currentCue) {
       // set resistance to average of lower and upper range
@@ -198,13 +200,5 @@ Target Cadence: n/a`;
 Target Resistance: ${currentCue.resistance_range.lower}-${currentCue.resistance_range.upper}
 Target Cadence: ${currentCue.cadence_range.lower}-${currentCue.cadence_range.upper}`;
     }
-
-    // Replace existing time div if it exists
-    const existingTimeDiv = timerDiv.querySelector(".time-info");
-    if (existingTimeDiv) {
-      existingTimeDiv.remove();
-    }
-    timeDiv.className = "time-info";
-    timerDiv.insertBefore(timeDiv, metricsDiv);
   }
 }, 100);
