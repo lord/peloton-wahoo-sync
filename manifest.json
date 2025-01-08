@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "Peloton API Monitor",
+  "version": "1.0",
+  "permissions": [],
+  "host_permissions": ["https://members.onepeloton.com/*"],
+  "content_scripts": [
+    {
+      "matches": ["https://members.onepeloton.com/*"],
+      "js": ["content.js"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["injected.js"],
+      "matches": ["https://members.onepeloton.com/*"]
+    }
+  ]
+}
